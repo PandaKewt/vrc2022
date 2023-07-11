@@ -12,7 +12,7 @@
 int tempgnd = 0;
 #define LeftServoGround 6
 #define RightServoGround 3
-// #define LeftServoPulley 4
+#define LeftServoPulley 4
 #define RightServoPulley 4
 
 #define LeftGroundState1 1800   //  45*
@@ -108,6 +108,7 @@ void setup()
     }
     pwm.begin();
     pwm.setOscillatorFrequency(27000000);
+
     pwm.setPWMFreq(60);
     Wire.setClock(400000);
     pwm.writeMicroseconds(LeftServoGround, 1500);
@@ -116,13 +117,7 @@ void setup()
 
 void loop()
 {
-    // R2 là đi thẳng, L1 là rẽ phải, 
-    // R1 là rẽ phải, L2 là đi lùi
-    // R2 cộng R1 = vừa đi thẳng vừa rẽ phải
-    // R2 cộng L1 = vừa đi thẳng vừa rẽ trái
-    // L2 cộng R1 = vừa đi lùi vừa rẽ phải
-    // L2 cộng L1 = vừa đi lùi vừa rẽ trái
-    // L2 + R2 = dừng
+
     
     bool stop = false;
     if (ps2x.Button(PSB_R1)) //
@@ -193,6 +188,7 @@ void loop()
             delayPullState = false;
             prevPull = millis();
             pwm.writeMicroseconds(RightServoPulley, 1000);
+            pwm.writeMicroseconds(LeftServoPulley, 1000);
     };
    
      // pull up
@@ -201,7 +197,7 @@ void loop()
             delayPullState = false;
             prevPull = millis();
             // do something
-            // pwm.writeMicroseconds(LeftServoPulley, 800);
+            pwm.writeMicroseconds(LeftServoPulley, 2200);
             pwm.writeMicroseconds(RightServoPulley, 2200);
             
         }
@@ -210,7 +206,7 @@ void loop()
         {
             delayPullState = true;
             {
-                // pwm.writeMicroseconds(LeftServoPulley, 0);
+                pwm.writeMicroseconds(LeftServoPulley, 0);
                 pwm.writeMicroseconds(RightServoPulley, 0);
             }
         }
